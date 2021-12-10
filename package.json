@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev":  "nodemon index.js",
-    "build": "python cards_create.py"
+    "cards": "python cards_create.py"
   },
   "author": "",
   "license": "ISC",
