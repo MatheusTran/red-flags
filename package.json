@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev":  "nodemon index.js",
-    "cards": "python cards_create.py"
+    "cards": "python cards_create.py",
+    "logs": "heroku logs --tail",
+    "commit": "call git-commit.bat"
   },
   "author": "",
   "license": "ISC",
