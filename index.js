@@ -20,15 +20,15 @@ app.use(express.static(path.join(__dirname, "public")))
 //run when a client connects
 io.on("connection", socket =>{
     
-    console.log("new connection")
+    //console.log("new connection")
     //broadcasts to the single user
     socket.emit("joined")
     //socket.broadcast.emit() broadcasts to everyone but the user
     socket.on("disconnect", ()=>{
-        console.log(socket.id)
+        //console.log(socket.id)
         //roomcode = thing //fix thisssss. ACTUALLY CREATE ROOMS instead of your shitty json files
         //io.emit("add_player", players[roomcode])
-        console.log("there was a discconect")
+        //console.log("there was a discconect")
     })
     //listen for client
     socket.on("pull", (color) =>{
@@ -38,7 +38,7 @@ io.on("connection", socket =>{
     })
     socket.on("new_player",(username, roomcode, id) =>{
         if (!players[roomcode]){
-            console.log("new room")
+            //console.log("new room")
             players[roomcode] = {}
         }
         players[roomcode][id] = {"name": username, "score":0, "swiper":false} //note to self, learn JQUERY you dumbass    
@@ -48,4 +48,4 @@ io.on("connection", socket =>{
 
 const PORT = 3000 || process.env.PORT;
 
-server.listen(PORT, () => console.log(`server running on port ${PORT}`));
+server.listen(PORT); //, () => console.log(`server running on port ${PORT}`)
