@@ -17,9 +17,12 @@ function randint(n){
 //set static folder
 app.use(express.static(path.join(__dirname, "public")))
 
+app.get("", function(req,res){
+    res.sendFile(__dirname + "/public/index.html");
+});
+
 //run when a client connects
 io.on("connection", socket =>{
-    
     //console.log("new connection")
     //broadcasts to the single user
     socket.emit("joined")
