@@ -1,0 +1,24 @@
+Matchmaking
+- be able to create a username
+- create room codes that can connect to one another
+- possibly add colors to each player?
+- Host has a start game button whenever there are 3 or more players in
+- Host can choose the rules, I.E how many white cards are played, etc
+- Host can kick or add people
+
+GAMEPLAY:
+- everybody gets 10 white cards and 5 red cards
+- one person is the swipper
+- everybody picks 2 white cards
+- everybody picks a red card, anyone could get that red card, even the person who played it
+- alternatively you get to see someone else's red cards and you choose a red card for them
+- possibly allow players to choose a photo or possibly upload a photo?
+- then a debate round starts, you are shown what red card you have and you are given time to come up with a plan
+- Or alternatively you start talking up about your person then the assigned person gets to play a red card
+- everybody gets to try and convince the single why they should choose to date them over the rest
+- the swipper gets to swipe through "tinder", left swipe to go to the next player, if they all get rejected then it loops back to the first player
+- if no one is selected in the alotted time period then the swipper gets penalized
+- the person that is swipped right on gets a point. the points are called "matches", you know, like tinder
+- next person becomes the swipper 
+- everyone who played gets back 2 white cards and 5 red cards
+- everyone gets to switch out one card every round
