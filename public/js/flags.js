@@ -8,7 +8,7 @@ const {username, roomcode} = Qs.parse(location.search,{
 
 socket.on("joined", ()=>{
     id = socket.id;
-    socket.emit("new_player", username, roomcode, id)
+    socket.emit("new_player", {username, roomcode, id})
     for(let x=0; x<10; x++){
         socket.emit("pull", "perks")
     };
@@ -31,7 +31,7 @@ socket.on("add_player", (usernames)=>{
     var player = document.createElement("option");
     player.classList.add("player");
     for(x in usernames){
-        player.textContent = usernames[x]["name"]
+        player.textContent = usernames[x]["username"]
         score.appendChild(player.cloneNode(true))
     };
 });

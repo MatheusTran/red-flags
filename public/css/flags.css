@@ -79,7 +79,7 @@ body {
 }
 
 select{
-    width: 100px;
+    width: auto;
     background-color: transparent;
     border: none;
 }
@@ -99,6 +99,7 @@ select::-webkit-scrollbar-thumb {
     margin: 5px;
     color: red;
     font-weight: bold;
+    width: auto;
 }
 
 .name{
@@ -106,7 +107,7 @@ select::-webkit-scrollbar-thumb {
 }
 
 .players-menu{
-    width: auto;
+    width: 50%;
     background-color: red;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
     font-size: 20px;
