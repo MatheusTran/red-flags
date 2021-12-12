@@ -3,7 +3,7 @@ const http = require('http');
 const express = require("express");
 const socketio = require("socket.io");
 const cards = require("./cards.json");
-const {userJoin, getCurrentUser, getARoom, removeUser} = require("./utils/users")
+const {userJoin, getCurrentUser, getARoom, removeUser, newAdmin} = require("./utils/users")
 
 
 const app = express();
@@ -38,6 +38,9 @@ io.on("connection", socket =>{
     socket.on("disconnect", ()=>{
         var quitter = getCurrentUser(socket.id)
         removeUser(quitter.id)
+        if (quitter.admin===true){
+            newAdmin(quitter.roomcode)
+        }
         io.emit("add_player", getARoom(quitter.roomcode))
     });
 });
