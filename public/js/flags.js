@@ -2,9 +2,7 @@ const socket = io();
 const red = [];
 const white = [];
 
-const {username, roomcode} = Qs.parse(location.search,{
-    ignoreQueryPrefix: true
-});
+const {username, roomcode} = Qs.parse(location.search,{ignoreQueryPrefix: true});
 
 socket.on("joined", ()=>{
     id = socket.id;
@@ -36,8 +34,11 @@ socket.on("add_player", (usernames)=>{
     };
 });
 
-function order66(jedi){
-    while(jedi.firstChild){
-        jedi.removeChild(parent.firstChild)
-    }
-}
+//cards and gameplay
+
+const itemManager = new Itemize();
+itemManager.apply(".list", {
+    removeBtnClass: "remove_btn",
+    dragAndDrop: true
+});
+
