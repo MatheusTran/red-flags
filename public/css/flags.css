@@ -105,6 +105,38 @@ select::-webkit-scrollbar-thumb {
     color: red;
 }
 
+div.scrollmenu {
+    width: auto;
+    background-color: white;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+div.scrollmenu a {
+    display: inline-block;
+    color: red;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+div.scrollmenu::-webkit-scrollbar {height: 0.5rem;}
+div.scrollmenu::-webkit-scrollbar-track {background: white;}
+div.scrollmenu::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#lower-half{
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 10px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .players-menu{
     width: 15rem;
     background-color: red;
@@ -112,9 +144,7 @@ select::-webkit-scrollbar-thumb {
     font-size: 20px;
     border-radius: 5px;
     padding: 15px;
-    margin: auto;
-    position: fixed;
-    bottom: 10px;
+    margin-right: auto;
 }
 
 .menu{
