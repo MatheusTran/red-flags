@@ -110,10 +110,12 @@ div.scrollmenu {
     background-color: white;
     overflow: auto;
     white-space: nowrap;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 div.scrollmenu a {
-    display: inline-block;
+
     color: red;
     text-align: center;
     padding: 14px;
@@ -176,21 +178,17 @@ div.scrollmenu::-webkit-scrollbar-thumb {
 }
 
 .card {
-    height: 7rem;
-    width: 10rem;
-    background-color: white; /**other colorrgb(42,33,57)**/
-    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    border-radius: 5px;
-    margin: 5px;
-    transition: all .2s ease-in-out;
-    border-color: white;
+    height: 5rem;
+    width: 4rem;
+    background-color: red; /**other colorrgb(42,33,57)**/
     color: white;
-    border: solid;
-    border-width: 0.5rem;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 15px;
+    transition: all .2s ease-in-out;
+    margin: 0.5rem;
+
 }
 
 .card:hover{
