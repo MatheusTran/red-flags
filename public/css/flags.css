@@ -106,21 +106,33 @@ select::-webkit-scrollbar-thumb {
 }
 
 div.scrollmenu {
-    width: auto;
+    width: 75%;
     background-color: white;
-    overflow: auto;
+    overflow-x: scroll;
     white-space: nowrap;
     display: flex;
-    justify-content: space-evenly;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-div.scrollmenu a {
-
-    color: red;
-    text-align: center;
-    padding: 14px;
+.card {
+    text-align: left;
+    height: 10rem;
+    min-width: 9rem;
     text-decoration: none;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+    border-radius: 0.5rem;
+    padding: 15px;
+    transition: all .2s ease-in-out;
+    margin: 0.5rem;
 }
+
+.red{
+    background-color: red;
+    color: white;
+}
+
 
 div.scrollmenu::-webkit-scrollbar {height: 0.5rem;}
 div.scrollmenu::-webkit-scrollbar-track {background: white;}
@@ -132,11 +144,11 @@ div.scrollmenu::-webkit-scrollbar-thumb {
 
 #lower-half{
     width: 100%;
-    height: auto;
+    height: 40%;
     position: fixed;
     bottom: 10px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .players-menu{
@@ -146,7 +158,6 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     font-size: 20px;
     border-radius: 5px;
     padding: 15px;
-    margin-right: auto;
 }
 
 .menu{
@@ -161,39 +172,16 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     margin: auto;
 }
 
-.container {
-    width: 750px;
-    height: 300px;
-    margin: auto;
-    display: grid;
-    grid-template-areas:
-    "thing thing thing thing"
-    "thing thing thing thing"
-    "thing thing thing thing";
-}
-
 .wordsthing{
     display: flex;
     justify-content: center;
 }
 
-.card {
-    height: 5rem;
-    width: 4rem;
-    background-color: red; /**other colorrgb(42,33,57)**/
-    color: white;
-    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
-    font-size: 20px;
-    border-radius: 5px;
-    padding: 15px;
-    transition: all .2s ease-in-out;
-    margin: 0.5rem;
 
-}
 
 .card:hover{
     cursor: pointer;
-    transform: scale(1.5);
+    transform: scale(1.25);
 }
 
 
