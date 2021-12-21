@@ -33,12 +33,3 @@ socket.on("add_player", (usernames)=>{
         score.appendChild(player.cloneNode(true))
     };
 });
-
-//cards and gameplay
-
-const itemManager = new Itemize();
-itemManager.apply(".list", {
-    removeBtnClass: "remove_btn",
-    dragAndDrop: true
-});
-
