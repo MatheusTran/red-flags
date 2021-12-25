@@ -20,13 +20,7 @@ function getCurrentUser(id){
 };
 
 function getARoom(room){
-    const everyone = []
-    for (let x =0; x<users.length; x++){
-        if (users[x].roomcode === room){
-            everyone.push(users[x])
-        }
-    }
-    return everyone
+    return rooms[room]
 };
 
 function removeUser(id){

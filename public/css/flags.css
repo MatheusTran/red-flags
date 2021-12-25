@@ -60,7 +60,7 @@ body {
     font-weight: bold;
 }
 
-::placeholder{
+.input::placeholder{
     color: antiquewhite;
     opacity: 0.5;
 }
@@ -115,9 +115,24 @@ div.scrollmenu {
     justify-content: flex-start;
 }
 
+.custom{
+    border: transparent;
+    color: inherit;
+    background-color: transparent;
+    width: 8rem;
+}
+
+.custom::placeholder{
+    color: inherit;
+    opacity: 0.75;
+}
+
 .card {
     text-align: left;
-    height: 10rem;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+    height: 10rem; /*min height is for the thing to extend. fix it later*/
     min-width: 9rem;
     text-decoration: none;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
@@ -126,6 +141,7 @@ div.scrollmenu {
     padding: 15px;
     transition: all .2s ease-in-out;
     margin: 0.5rem;
+    border: solid black 1px;
 }
 
 .red{
@@ -133,6 +149,10 @@ div.scrollmenu {
     color: white;
 }
 
+.white{
+    background-color: white;
+    color: red;
+}
 
 div.scrollmenu::-webkit-scrollbar {height: 0.5rem;}
 div.scrollmenu::-webkit-scrollbar-track {background: white;}
@@ -140,6 +160,22 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     background: red;
     border-radius: 5px;
     margin: 5px;
+}
+
+#upper-half{
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    height: 50%;
+    background-color: red;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.confirm{
+    margin: 1rem;
 }
 
 #lower-half{

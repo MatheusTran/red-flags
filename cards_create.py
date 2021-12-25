@@ -3,7 +3,7 @@ def jsonify(text):
         thing = list(file)
         last = len(thing)-1
         for i,x in enumerate(thing):
-            card = x.replace("\n", "").replace("/", "\\n \\n").replace('"', '\\"')
+            card = x.replace("\n", "").replace("/ ", "\\n \\n").replace('"', '\\"')
             if "Custom" in x or "___" in x:
                 json.write('        {'+f'"text":"{card}", ' + '"Custom": true}' + (", \n" if i != last else "\n"))
             else:

@@ -28,7 +28,7 @@ io.on("connection", socket =>{
     socket.on("pull", (color) =>{
         var random = randint(cards[color].length)
         socket.emit("new_card", cards[color][random], color)
-        cards[color].splice(random,1)
+        //cards[color].splice(random,1) 
     });
     socket.on("new_player",({username, roomcode, id, score}) =>{
         const user=userJoin(id, username, roomcode)
@@ -41,7 +41,7 @@ io.on("connection", socket =>{
         if (quitter.admin===true){
             newAdmin(quitter.roomcode)
         }
-        io.emit("add_player", getARoom(quitter.roomcode))
+        io.to(quitter.roomcode).emit("add_player", getARoom(quitter.roomcode))
     });
 });
 
