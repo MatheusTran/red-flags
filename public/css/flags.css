@@ -129,11 +129,13 @@ div.scrollmenu {
 
 .card {
     text-align: left;
+    user-select: none;
     word-wrap: break-word;
     white-space: pre-wrap;
     word-break: break-word;
-    height: 10rem; /*min height is for the thing to extend. fix it later*/
+    min-height: 10rem; /*min height is for the thing to extend. fix it later*/
     min-width: 9rem;
+    max-width: 9rem; /*I'll be honest I have no clue why this works but it does, so deal with it*/
     text-decoration: none;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
     font-size: 20px;
@@ -142,6 +144,11 @@ div.scrollmenu {
     transition: all .2s ease-in-out;
     margin: 0.5rem;
     border: solid black 1px;
+}
+
+.card:hover{
+    cursor: pointer;
+    transform: scale(1.25); /*might remove this later*/
 }
 
 .red{
@@ -212,14 +219,6 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     display: flex;
     justify-content: center;
 }
-
-
-
-.card:hover{
-    cursor: pointer;
-    transform: scale(1.25);
-}
-
 
 .button:hover{
     cursor: pointer;
