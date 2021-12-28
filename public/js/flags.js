@@ -51,14 +51,22 @@ socket.on("add_player", (usernames)=>{
 
 function select(id){
     var selected = document.getElementById(id)
-    destination = document.getElementById("upper-half")
+    destination = document.getElementById("played-cards")
     if (selected.parentElement.id === "hand" && destination.children.length < 2){
-        destination = document.getElementById("upper-half")
-        selected.parentElement.removeChild(selected)
-        destination.appendChild(selected)
+        destination = document.getElementById("played-cards")
     } else {
         destination = document.getElementById("hand") //note to self, you can change this to that other thing
-        selected.parentElement.removeChild(selected)
-        destination.appendChild(selected)
+    }
+    selected.parentElement.removeChild(selected)
+    destination.appendChild(selected)
+}
+
+function create_custom(id){
+    var custom = document.getElementById(id)
+    text = document.querySelector(`[id='${id}'] .custom`).value
+    if (custom.innerText === "(Custom card)\n"){
+        custom.innerText = text
+    } else {
+        custom.innerText = custom.innerText.replace("_____", text)
     }
 }

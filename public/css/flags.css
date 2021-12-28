@@ -176,6 +176,12 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     top: 0px;
     height: 50%;
     background-color: red;
+    justify-content: center;
+    align-items: center;
+}
+
+#played-cards{
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
