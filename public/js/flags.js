@@ -38,7 +38,7 @@ socket.on("new_card", (card, type) =>{
     hand.appendChild(thing)
 });
 
-socket.on("add_player", (usernames)=>{
+socket.on("add_player", (usernames)=>{ //this is more of a "scoreboard update" it originally was not meant to do this, however it works
     score = document.querySelector(".players-menu select");
     score.innerHTML = "";
     var player = document.createElement("option");

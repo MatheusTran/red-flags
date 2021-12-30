@@ -3,7 +3,7 @@ const http = require('http');
 const express = require("express");
 const socketio = require("socket.io");
 const cards = require("./cards.json");
-const {userJoin, getCurrentUser, getARoom, removeUser, newAdmin} = require("./utils/users")
+const {userJoin, getCurrentUser, getARoom, removeUser, newAdmin, order_shuffle} = require("./utils/users")
 
 
 const app = express();
@@ -33,7 +33,8 @@ io.on("connection", socket =>{
     socket.on("new_player",({username, roomcode, id, score}) =>{
         const user=userJoin(id, username, roomcode)
         socket.join(user.roomcode);
-        io.to(user.roomcode).emit("add_player", getARoom(user.roomcode))
+        io.to(user.roomcode).emit("add_player", getARoom(user.roomcode)["players"])
+        
     });
     socket.on("disconnect", ()=>{
         var quitter = getCurrentUser(socket.id)
@@ -41,7 +42,8 @@ io.on("connection", socket =>{
         if (quitter.admin===true){
             newAdmin(quitter.roomcode)
         }
-        io.to(quitter.roomcode).emit("add_player", getARoom(quitter.roomcode))
+        io.to(quitter.roomcode).emit("add_player", getARoom(quitter.roomcode)["players"])
+        order_shuffle(quitter.roomcode)
     });
 });
 
