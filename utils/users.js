@@ -1,11 +1,11 @@
 const users = [];
 const rooms = {};
-const phases = ["white cards", "presenting", "red cards", "pick"]
+const phases = ["white", "presenting", "red", "pick"]
 //join user to chat
 function userJoin(id, username, roomcode){
-    const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false};
+    const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false, played:[]};
     if (!rooms[roomcode]){
-        rooms[roomcode] = {players:[],state:"awaiting",turn:0}
+        rooms[roomcode] = {players:[],data:{state:"awaiting",turn:0}}
         user.admin = true
     }
     users.push(user);
@@ -28,17 +28,17 @@ function shuffle(array) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
       // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
     return array;
 }
 
 
 function order_shuffle(roomcode){
+    console.log(rooms[roomcode])
     temp = [...Array(rooms[roomcode]["players"].length).keys()]//this creates a list of numbers up to n, sort of like [x for x in range(n)] in python
     shuffle(temp)
-    for (x=0;x<rooms[roomcode]["players"].length;x++){//I wish there was an enumerate function like in python
+    for (x in rooms[roomcode]["players"]){//this does not do the same thing as python, keep that in mind
         rooms[roomcode]["players"][x].swiper = temp[x]===0 //I just realized this is a typo, should be swipper not swiper. it's a bit too late to change it now
         rooms[roomcode]["players"][x].order = temp[x]
     }

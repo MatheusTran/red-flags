@@ -33,8 +33,7 @@ io.on("connection", socket =>{
     socket.on("new_player",({username, roomcode, id, score}) =>{
         const user=userJoin(id, username, roomcode)
         socket.join(user.roomcode);
-        io.to(user.roomcode).emit("add_player", getARoom(user.roomcode)["players"])
-        
+        io.to(user.roomcode).emit("room_update", getARoom(user.roomcode))
     });
     socket.on("disconnect", ()=>{
         var quitter = getCurrentUser(socket.id)
@@ -42,10 +41,10 @@ io.on("connection", socket =>{
         if (quitter.admin===true){
             newAdmin(quitter.roomcode)
         }
-        io.to(quitter.roomcode).emit("add_player", getARoom(quitter.roomcode)["players"])
-        order_shuffle(quitter.roomcode)
+        io.to(quitter.roomcode).emit("room_update", getARoom(quitter.roomcode))
     });
 });
+//order_shuffle(roomcode)
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`server running on port ${PORT}`)); //
