@@ -2,10 +2,10 @@ const socket = io();
 cards= [];
 //https://avatars.dicebear.com/api/avataaars/(seed here).svg, use an image tag with this as the src=
 const {username, roomcode} = Qs.parse(location.search,{ignoreQueryPrefix: true});
-const message = document.querySelector(".msg-box")
+const message = document.querySelector("#msg-box")
 button = document.querySelector("#player-button")
 
-socket.on("joined", ()=>{
+socket.on("joined", ()=>{ //change this in the future to change the message on the top
     id = socket.id;
     socket.emit("new_player", {username, roomcode, id})
     for(let x=0; x<10; x++){
@@ -46,38 +46,58 @@ socket.on("room_update", (data)=>{
     };
     if (room["data"]["state"]==="awaiting" && room["players"].find(user => user.username === username)["admin"]){
         button.style.display = "inline-block"
-    }
+    } 
 });
 
-function select(id){
-    var selected = document.getElementById(id)
-    var played = document.getElementById("played-cards")
-    switch (room["data"]["state"]){
-        case "white": 
-            if (selected.parentElement.id === "hand" && played.children.length < 2 && selected.classList.value === "white card"){
-                destination = document.getElementById("played-cards")
-            } else {
-                destination = document.getElementById("hand") //note to self, you can change this to that other thing
+socket.on("game", (upRoom)=>{
+    room = upRoom
+    switch(room["data"]["state"]){
+        case "awaiting":
+            message.innerText = "waiting for host to start the game"
+        case "white":
+            if (room["players"].find(user => user.username === username)["swiper"]){
+                message.innerText = "you are the swipper, wait for others"
+                socket.emit("increment", roomcode)
+                break;
             }
-            selected.parentElement.removeChild(selected)
-            destination.appendChild(selected)
-            button.style.display = played.children.length === 2 ? "inline-block" : "none"
+            message.innerText = "pick two white cards"
+            button.innerText = "confirm"
             break;
-
-        case "red":
-            if (selected.parentElement.id === "hand" && played.children.length < 1 && selected.classList.value === "red card"){
-                destination = document.getElementById("played-cards")
-            } else {
-                destination = document.getElementById("hand") //note to self, you can change this to that other thing
-            }
-            console.log(played.children.length)
-            selected.parentElement.removeChild(selected)
-            destination.appendChild(selected)
-            button.style.display = played.children.length === 1 ? "inline-block" : "none"
+        case "waiting":
+            message.innerText = "waiting for others"
             break;
-        
-
     }
+})
+
+function select(id){//this is to select the cards
+    if (!room["players"].find(user => user.username === username)["swiper"]){
+        var selected = document.getElementById(id)
+        var played = document.getElementById("played-cards")
+        switch (room["data"]["state"]){
+            case "white": 
+                if (selected.parentElement.id === "hand" && played.children.length < 2 && selected.classList.value === "white card"){ //switch this around later, add an elif
+                    destination = document.getElementById("played-cards")
+                } else {
+                    destination = document.getElementById("hand")
+                }
+                selected.parentElement.removeChild(selected)
+                destination.appendChild(selected)
+                button.style.display = played.children.length === 2 ? "inline-block" : "none"
+                break;
+    
+            case "red":
+                if (selected.parentElement.id === "hand" && played.children.length < 1 && selected.classList.value === "red card"){
+                    destination = document.getElementById("played-cards")
+                } else {
+                    destination = document.getElementById("hand") 
+                }
+                console.log(played.children.length)
+                selected.parentElement.removeChild(selected)
+                destination.appendChild(selected)
+                button.style.display = played.children.length === 1 ? "inline-block" : "none"
+                break;
+        }
+    };
 }
 
 function create_custom(id){
@@ -95,25 +115,23 @@ function action(){
         case "awaiting":
             if (room["players"].length > 2){
                 socket.emit("change_phase", roomcode)
+                button.style.display = "none"
             } else {
                 alert("need at least 3 players to begin")
             }
             break;
-        case "white": //note to self, only let the button show if the right cards are played
-            play = document.getElementById("played-cards")
-            if ((play.children[1].classList.value && play.children[0].classList.value) === "white card"){
-                socket.emit("increment", roomcode)
-            } else {
-                alert("play two white cards")
+        case "white" || "red": 
+            submit = document.getElementById("played-cards")
+            var submit_cards = []
+            for (let x=0; x < submit.children.length;x++){
+                if(cards[parseInt(submit.children[x].id)-1]["Custom"]){
+                    create_custom(submit.children[x].id)
+                }
+                submit_cards.push(submit.children[x].innerText)
             }
-            break;
-        case "red":
-            play = document.getElementById("played-cards")
-            if (play.children[0].classList.value === "red card"){
-                socket.emit("increment", roomcode)
-            } else {
-                alert("play a red card")
-            }
+            socket.emit("submitCards",roomcode, username, submit_cards)
+            socket.emit("increment", roomcode)
+            button.style.display = "none"
             break;
         case "presenting":
             socket.emit("increment", roomcode)

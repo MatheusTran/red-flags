@@ -1,6 +1,5 @@
 const users = [];
 const rooms = {};
-const phases = ["white", "presenting", "red", "pick"]
 //join user to chat
 function userJoin(id, username, roomcode){
     const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false, played:[]};
@@ -15,7 +14,6 @@ function userJoin(id, username, roomcode){
     return user;
 };
 
-//get current user
 function getCurrentUser(id){
     return users.find(user => user.id === id);
 };
@@ -35,15 +33,12 @@ function shuffle(array) {
 
 
 function order_shuffle(roomcode){
-    console.log(rooms[roomcode])
     temp = [...Array(rooms[roomcode]["players"].length).keys()]//this creates a list of numbers up to n, sort of like [x for x in range(n)] in python
     shuffle(temp)
     for (x in rooms[roomcode]["players"]){//this does not do the same thing as python, keep that in mind
         rooms[roomcode]["players"][x].swiper = temp[x]===0 //I just realized this is a typo, should be swipper not swiper. it's a bit too late to change it now
         rooms[roomcode]["players"][x].order = temp[x]
     }
-    console.log(temp)
-    console.table(rooms[roomcode]["players"])
 }
 
 function getARoom(room){

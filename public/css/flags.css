@@ -283,14 +283,12 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     transform-origin: left;
 }
 
-.btn:hover::before,
-.btn:focus::before {
+.btn:hover::before {
     transform: scaleX(1);
 }
 
 
-.btn:hover,
-.btn:focus {
+.btn:hover {
     color: red;
 }
 

@@ -4,6 +4,7 @@ const express = require("express");
 const socketio = require("socket.io");
 const cards = require("./cards.json");
 const {userJoin, getCurrentUser, getARoom, removeUser, newAdmin, order_shuffle} = require("./utils/users")
+const phases = ["white", "presenting", "red", "pick"]
 
 
 const app = express();
@@ -30,11 +31,41 @@ io.on("connection", socket =>{
         socket.emit("new_card", cards[color][random], color)
         //cards[color].splice(random,1) 
     });
+
     socket.on("new_player",({username, roomcode, id, score}) =>{
         const user=userJoin(id, username, roomcode)
         socket.join(user.roomcode);
         io.to(user.roomcode).emit("room_update", getARoom(user.roomcode))
     });
+
+    socket.on("change_phase",(roomcode) =>{ //might change this to "game start", and then change the infra structure, might not use this as much 
+        var current = getARoom(roomcode)
+        var next = phases[phases.indexOf(current["data"]["state"]) + 1]
+        if (next === "white"){ 
+            order_shuffle(roomcode)
+        }
+        current["data"]["state"] = next
+        io.to(roomcode).emit("game", current)
+    });
+    socket.on("increment", (roomcode) =>{
+        var current = getARoom(roomcode)
+        switch (current["data"]["state"]){
+            case "white":
+                current["data"]["turn"] ++
+                if (current["data"]["turn"] === current["players"].length){
+                    current["data"]["state"] = "presenting"
+                    current["data"]["turn"] = 0
+                    io.to(roomcode).emit("game", current)
+                } 
+        }
+    })
+
+    socket.on("submitCards", (room, username, cards) =>{
+        user = getARoom(room)["players"].find(user => user.username === username);
+        user.played = cards
+        console.log(cards)
+    })
+
     socket.on("disconnect", ()=>{
         var quitter = getCurrentUser(socket.id)
         removeUser(quitter.id)
