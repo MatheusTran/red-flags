@@ -4,6 +4,8 @@ cards= [];
 const {username, roomcode} = Qs.parse(location.search,{ignoreQueryPrefix: true});
 const message = document.querySelector("#msg-box")
 button = document.querySelector("#player-button")
+played = document.getElementById("played-cards")
+
 
 socket.on("joined", ()=>{ //change this in the future to change the message on the top
     id = socket.id;
@@ -18,8 +20,8 @@ socket.on("joined", ()=>{ //change this in the future to change the message on t
 
 socket.on("new_card", (card, type) =>{
     hand = document.querySelector(".scrollmenu")
-    thing = document.createElement("div")
     cards.push(card)
+    thing = document.createElement("div")
     thing.setAttribute("class", (type === "perks" ? "white" : "red") + " card")
     thing.textContent = card["text"];
     if (card["Custom"]){
@@ -28,11 +30,12 @@ socket.on("new_card", (card, type) =>{
         custom.classList.add("custom")
         custom.setAttribute("placeholder", "custom text")
         thing.appendChild(custom)
-    };
+    }; //make this a function 
     thing.setAttribute("id", cards.length)
     thing.setAttribute("ondblclick", `select(${cards.length})`)
     hand.appendChild(thing)
 });
+
 
 socket.on("room_update", (data)=>{
     room = data
@@ -54,25 +57,42 @@ socket.on("game", (upRoom)=>{
     switch(room["data"]["state"]){
         case "awaiting":
             message.innerText = "waiting for host to start the game"
+            break;
         case "white":
             if (room["players"].find(user => user.username === username)["swiper"]){
-                message.innerText = "you are the swipper, wait for others"
+                message.innerText = "You are lonely and looking for someone to fill the empty void that is your heart. Don't worry, you'll find someone eventually"
                 socket.emit("increment", roomcode)
                 break;
             }
-            message.innerText = "pick two white cards"
+            message.innerText = `${room["players"].find(user => user.swiper)["username"]} is looking for love, play two white cards`
             button.innerText = "confirm"
             break;
         case "waiting":
             message.innerText = "waiting for others"
             break;
-    }
+        case "presenting":
+            presenter = room["players"].find(user => user.order ===room["data"]["turn"])["username"]
+            message.innerText = `${presenter} is presenting their candidate`
+            played.innerHTML = ""
+            if (presenter === username){
+                you = room["players"].find(user => user.username === username)
+                message.innerText = "you are presenting your candidate, press next to reveal your cards"
+                button.innerText = "next"
+                button.style.display = "inline-block"
+            }
+        }
+})
+
+socket.on("show", (card)=>{
+    thing = document.createElement("div")
+    thing.setAttribute("class", (room["data"]["state"] === "presenting" ? "white" : "red") + " card")
+    thing.textContent = card;
+    played.appendChild(thing)
 })
 
 function select(id){//this is to select the cards
     if (!room["players"].find(user => user.username === username)["swiper"]){
         var selected = document.getElementById(id)
-        var played = document.getElementById("played-cards")
         switch (room["data"]["state"]){
             case "white": 
                 if (selected.parentElement.id === "hand" && played.children.length < 2 && selected.classList.value === "white card"){ //switch this around later, add an elif
@@ -121,20 +141,25 @@ function action(){
             }
             break;
         case "white" || "red": 
-            submit = document.getElementById("played-cards")
             var submit_cards = []
-            for (let x=0; x < submit.children.length;x++){
-                if(cards[parseInt(submit.children[x].id)-1]["Custom"]){
-                    create_custom(submit.children[x].id)
+            for (let x=0; x < played.children.length;x++){
+                if(cards[parseInt(played.children[x].id)-1]["Custom"]){
+                    create_custom(played.children[x].id)
                 }
-                submit_cards.push(submit.children[x].innerText)
+                submit_cards.push(played.children[x].innerText)
             }
             socket.emit("submitCards",roomcode, username, submit_cards)
             socket.emit("increment", roomcode)
             button.style.display = "none"
             break;
         case "presenting":
+            if (you["played"].length > 0){
+                socket.emit("present", roomcode, you["played"][0], "white")
+                you["played"].splice(0,1)
+                break;
+            }
             socket.emit("increment", roomcode)
+            button.style.display = "none"
             break;
     }
 }

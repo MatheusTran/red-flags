@@ -49,15 +49,26 @@ io.on("connection", socket =>{
     });
     socket.on("increment", (roomcode) =>{
         var current = getARoom(roomcode)
+        current["data"]["turn"] ++
         switch (current["data"]["state"]){
             case "white":
-                current["data"]["turn"] ++
                 if (current["data"]["turn"] === current["players"].length){
                     current["data"]["state"] = "presenting"
-                    current["data"]["turn"] = 0
+                    current["data"]["turn"] = 1
                     io.to(roomcode).emit("game", current)
                 } 
+                break;
+            case "presenting": //might have to change this to default, or maybe an if else
+                if (current["data"]["turn"] > current["players"].length){
+                    current["data"]["state"] = "red"
+                    current["data"]["turn"] = 1
+                }
+                io.to(roomcode).emit("game", current)
+                break;
         }
+    })
+    socket.on("present", (roomcode, card) =>{
+        io.to(roomcode).emit("show", card)
     })
 
     socket.on("submitCards", (room, username, cards) =>{
