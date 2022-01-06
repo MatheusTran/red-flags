@@ -76,12 +76,10 @@ io.on("connection", socket =>{
         }
     })
     socket.on("winner", (roomcode) =>{
-        console.log("winner selected")
         current = getARoom(roomcode)
         winner = current["players"].find(user => user.order === current["data"]["turn"])
         winner.score ++
         order_shuffle(roomcode)
-        console.log(current)
         current["data"]["turn"] = 0
         current["data"]["state"] = "white"
         io.to(roomcode).emit("room_update", current)

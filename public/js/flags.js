@@ -149,7 +149,6 @@ function select(id){//this is to select the cards
                     } else {
                         destination = document.getElementById("hand") 
                     }
-                    console.log(played.children.length)
                     selected.parentElement.removeChild(selected)
                     destination.appendChild(selected)
                     button.style.display = played.children.length === 3 ? "inline-block" : "none"
