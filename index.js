@@ -87,15 +87,15 @@ io.on("connection", socket =>{
         io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "white")
         io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "white")
         io.to(roomcode).emit("new_card", cards["flags"][randint(cards["flags"].length)], "red")
-    })
+    });
     socket.on("present", (roomcode, card, type) =>{
         io.to(roomcode).emit("show", card, type)
-    })
+    });
 
     socket.on("submitCards", (room, username, cards) =>{
         user = getARoom(room)["players"].find(user => user.username === username);
         user.played.push(cards)
-    })
+    });
 
     socket.on("disconnect", ()=>{
         var quitter = getCurrentUser(socket.id)
