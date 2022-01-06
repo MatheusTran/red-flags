@@ -27,6 +27,7 @@ io.on("connection", socket =>{
     socket.emit("joined");
     //listen for client
     socket.on("pull", (color) =>{
+        console.log(cards[color].length)
         var random = randint(cards[color].length)
         socket.emit("new_card", cards[color][random], color)
         //cards[color].splice(random,1) 
