@@ -84,9 +84,9 @@ io.on("connection", socket =>{
         current["data"]["state"] = "white"
         io.to(roomcode).emit("room_update", current)
         io.to(roomcode).emit("game", current)
-        io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "white")
-        io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "white")
-        io.to(roomcode).emit("new_card", cards["flags"][randint(cards["flags"].length)], "red")
+        io.to(roomcode).emit("new_card", cards["white"][randint(cards["white"].length)], "white")
+        io.to(roomcode).emit("new_card", cards["white"][randint(cards["white"].length)], "white")
+        io.to(roomcode).emit("new_card", cards["red"][randint(cards["red"].length)], "red")
     });
     socket.on("present", (roomcode, card, type) =>{
         io.to(roomcode).emit("show", card, type)
