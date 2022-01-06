@@ -126,13 +126,43 @@ select::-webkit-scrollbar-thumb {
 }
 
 div.scrollmenu {
-    width: 75%;
-    background-color: white;
+    background-color: transparent;
     overflow-x: scroll;
+    overflow-y:hidden;
     white-space: nowrap;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+}
+
+#played-cards{
+    width: 90%;
+    min-height: 6rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#played-cards::-webkit-scrollbar {height: 0.5rem;}
+#played-cards::-webkit-scrollbar-track {background: red;}
+#played-cards::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#hand::-webkit-scrollbar {height: 0.5rem;}
+#hand::-webkit-scrollbar-track {background: white;}
+#hand::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#hand{
+    width: 75%;
 }
 
 .custom{
@@ -168,7 +198,7 @@ div.scrollmenu {
 
 .card:hover{
     cursor: pointer;
-    transform: scale(1.25); /*might remove this later*/
+    /*transform: scale(1.25); /*might remove this later*/
 }
 
 .red{
@@ -181,12 +211,36 @@ div.scrollmenu {
     color: red;
 }
 
-div.scrollmenu::-webkit-scrollbar {height: 0.5rem;}
-div.scrollmenu::-webkit-scrollbar-track {background: white;}
-div.scrollmenu::-webkit-scrollbar-thumb {
-    background: red;
-    border-radius: 5px;
-    margin: 5px;
+.swipe{
+    height: 50%;
+    width: 5%;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    position: absolute;
+    display: none; /*display flex*/
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: larger;
+    cursor: pointer;
+}
+
+.right{
+    right: 0;
+}
+
+.left{
+    left: 0;
+}
+
+i {
+    transform: scale(3);
+    transition: all .2s ease-in-out;
+}
+
+i:hover{
+    cursor: pointer;
+    transform: scale(3.5);
 }
 
 #upper-half{
@@ -198,18 +252,6 @@ div.scrollmenu::-webkit-scrollbar-thumb {
     background-color: red;
     justify-content: center;
     align-items: center;
-}
-
-#played-cards{
-    width: 100%;
-    min-height: 5rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-#played-cards:first-child{/*figure why this is not working, might be because this is being overwritten by the card's class*/
-    margin-left: 100px;
 }
 
 .confirm{

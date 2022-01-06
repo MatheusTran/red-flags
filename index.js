@@ -4,8 +4,8 @@ const express = require("express");
 const socketio = require("socket.io");
 const cards = require("./cards.json");
 const {userJoin, getCurrentUser, getARoom, removeUser, newAdmin, order_shuffle} = require("./utils/users")
-const phases = ["white", "presenting", "red", "pick"]
 
+//note to self, it might be bad if I just straight up remove people from rooms, I should fix the whole thing in case someone leaves
 
 const app = express();
 const server = http.createServer(app);
@@ -32,25 +32,21 @@ io.on("connection", socket =>{
         //cards[color].splice(random,1) 
     });
 
-    socket.on("new_player",({username, roomcode, id, score}) =>{
+    socket.on("new_player",({username, roomcode, id}) =>{
         const user=userJoin(id, username, roomcode)
         socket.join(user.roomcode);
         io.to(user.roomcode).emit("room_update", getARoom(user.roomcode))
     });
 
-    socket.on("change_phase",(roomcode) =>{ //might change this to "game start", and then change the infra structure, might not use this as much 
-        var current = getARoom(roomcode)
-        var next = phases[phases.indexOf(current["data"]["state"]) + 1]
-        if (next === "white"){ 
-            order_shuffle(roomcode)
-        }
-        current["data"]["state"] = next
-        io.to(roomcode).emit("game", current)
-    });
     socket.on("increment", (roomcode) =>{
         var current = getARoom(roomcode)
-        current["data"]["turn"] ++
+        current["data"]["turn"]++
         switch (current["data"]["state"]){
+            case "awaiting":
+                order_shuffle(roomcode)
+                current["data"]["turn"] = 0
+                current["data"]["state"] = "white"
+                io.to(roomcode).emit("game", current)
             case "white":
                 if (current["data"]["turn"] === current["players"].length){
                     current["data"]["state"] = "presenting"
@@ -59,22 +55,49 @@ io.on("connection", socket =>{
                 } 
                 break;
             case "presenting": //might have to change this to default, or maybe an if else
-                if (current["data"]["turn"] > current["players"].length){
+                if (current["data"]["turn"] >= current["players"].length){
                     current["data"]["state"] = "red"
                     current["data"]["turn"] = 1
                 }
                 io.to(roomcode).emit("game", current)
                 break;
+            case "red":
+                if (current["data"]["turn"] >= current["players"].length){
+                    current["data"]["turn"] = 1
+                    current["data"]["state"] = "pick"
+                }
+                io.to(roomcode).emit("game", current)
+                break;
+            case "pick":
+                if (current["data"]["turn"] >= current["players"].length){
+                    current["data"]["turn"] = 1
+                }
+                io.to(roomcode).emit("game", current)
         }
     })
-    socket.on("present", (roomcode, card) =>{
-        io.to(roomcode).emit("show", card)
+    socket.on("winner", (roomcode) =>{
+        console.log("winner selected")
+        current = getARoom(roomcode)
+        winner = current["players"].find(user => user.order === current["data"]["turn"])
+        winner.score ++
+        order_shuffle(roomcode)
+        console.log(current)
+        current["data"]["turn"] = 0
+        current["data"]["state"] = "white"
+        io.to(roomcode).emit("room_update", current)
+        io.to(roomcode).emit("game", current)
+        var random = randint(cards[color].length)
+        io.to(roomcode).emit("new_card", cards["perks"][random], "perks")
+        io.to(roomcode).emit("new_card", cards["perks"][random], "perks")
+        io.to(roomcode).emit("new_card", cards["flags"][random], "flags")
+    })
+    socket.on("present", (roomcode, card, type) =>{
+        io.to(roomcode).emit("show", card, type)
     })
 
     socket.on("submitCards", (room, username, cards) =>{
         user = getARoom(room)["players"].find(user => user.username === username);
-        user.played = cards
-        console.log(cards)
+        user.played.push(cards)
     })
 
     socket.on("disconnect", ()=>{

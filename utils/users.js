@@ -9,7 +9,7 @@ function userJoin(id, username, roomcode){
     }
     users.push(user);
     rooms[roomcode]["players"].push(user)
-    user.order = rooms[roomcode]["players"].length -1
+    //user.order = rooms[roomcode]["players"].length -1
     console.table(rooms[roomcode]["players"])
     return user;
 };
