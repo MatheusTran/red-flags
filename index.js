@@ -27,7 +27,6 @@ io.on("connection", socket =>{
     socket.emit("joined");
     //listen for client
     socket.on("pull", (color) =>{
-        console.log(cards[color].length)
         var random = randint(cards[color].length)
         socket.emit("new_card", cards[color][random], color)
         //cards[color].splice(random,1) 
@@ -85,9 +84,9 @@ io.on("connection", socket =>{
         current["data"]["state"] = "white"
         io.to(roomcode).emit("room_update", current)
         io.to(roomcode).emit("game", current)
-        io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "perks")
-        io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "perks")
-        io.to(roomcode).emit("new_card", cards["flags"][randint(cards["flags"].length)], "flags")
+        io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "white")
+        io.to(roomcode).emit("new_card", cards["perks"][randint(cards["perks"].length)], "white")
+        io.to(roomcode).emit("new_card", cards["flags"][randint(cards["flags"].length)], "red")
     })
     socket.on("present", (roomcode, card, type) =>{
         io.to(roomcode).emit("show", card, type)
