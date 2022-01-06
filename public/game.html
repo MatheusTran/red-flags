@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>red flags, the ultimate dating game</title>
     <link rel="stylesheet" href="./css/flags.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"><!--this is the csv for fontawesome-->
     <link rel="icon" href="./img/red flag.png" type="image/icon type">
 </head>
 <body>
 <div id="upper-half"> 
     <h2 id="msg-box">waiting for host to start the game</h2>
-    <div id="played-cards" class="scrollmenu">
-
+    <div id="played-cards" class="scrollmenu"> <!--this no longer needs to be a scroll menu, but I will keep it-->
+        <!--cards that are played go here-->
     </div>
-    <button id="player-button" class="btn" onclick="action()">start</button>
+    <button id="player-button" class="btn" onclick="action()">start</button> <!--this is the button that the players use for everything-->
 </div>
 <div class="left swipe" onclick="socket.emit('increment', roomcode)"><i class="fas fa-angle-left"></i></div>
 <div class="right swipe" onclick="socket.emit('winner',roomcode)"><i class="fas fa-angle-right"></i></div>
@@ -21,15 +21,15 @@
     <div class="players-menu">
         <p>score</p>
         <select size="5">
-            <!--<option class="player">player</option>-->
+            <!--this is the scoreboard-->
             <option class="player">Player</option>
         </select>
     </div>
     <div class="scrollmenu" id="hand">
-
+        <!--this is where the cards go-->
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.2/qs.min.js" integrity="sha512-ErYZLDi4WRoox2JhOIADWBydTRhMJ0KIXnv5C1GvuY8YooLGapnebaM3iRGhwS6/E9ONXj0MRXp6bhu73sdFkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.2/qs.min.js" integrity="sha512-ErYZLDi4WRoox2JhOIADWBydTRhMJ0KIXnv5C1GvuY8YooLGapnebaM3iRGhwS6/E9ONXj0MRXp6bhu73sdFkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!--this is to get environmental variables, the username and room code-->
 <script src="/socket.io/socket.io.js"></script>
 <script src="./js/flags.js"></script>
 </body>

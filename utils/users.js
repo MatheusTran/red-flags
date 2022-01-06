@@ -38,6 +38,7 @@ function order_shuffle(roomcode){
     for (x in rooms[roomcode]["players"]){//this does not do the same thing as python, keep that in mind
         rooms[roomcode]["players"][x].swiper = temp[x]===0 //I just realized this is a typo, should be swipper not swiper. it's a bit too late to change it now
         rooms[roomcode]["players"][x].order = temp[x]
+        rooms[roomcode]["players"][x].played = []
     }
 }
 

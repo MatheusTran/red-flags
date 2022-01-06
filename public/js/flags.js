@@ -13,10 +13,10 @@ socket.on("joined", ()=>{ //change this in the future to change the message on t
     id = socket.id;
     socket.emit("new_player", {username, roomcode, id})
     for(let x=0; x<10; x++){
-        socket.emit("pull", "perks")//I can change this in the future
+        socket.emit("pull", "white")//I can change this in the future
     };
     for(let x=0; x<5; x++){
-        socket.emit("pull", "flags")
+        socket.emit("pull", "red")
     };
 });
 
@@ -24,7 +24,7 @@ socket.on("new_card", (card, type) =>{
     hand = document.querySelector("#hand")
     cards.push(card)
     thing = document.createElement("div")
-    thing.setAttribute("class", (type === "perks" ? "white" : "red") + " card") //if I change type to be white or red, I can just use type here, I need to change cards.json for that
+    thing.setAttribute("class", type + " card") //if I change type to be white or red, I can just use type here, I need to change cards.json for that
     thing.textContent = card["text"];
     if (card["Custom"]){
         thing.appendChild(document.createElement("br"))

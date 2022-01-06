@@ -1,5 +1,5 @@
 { 
-    "flags": [ 
+    "red": [ 
         {"text":"Thinks they're a Jedi", "Custom": false}, 
         {"text":"Civil War reenactor", "Custom": false}, 
         {"text":"Super super racist", "Custom": false}, 
@@ -228,7 +228,7 @@
         {"text":"(Custom card)", "Custom": true}, 
         {"text":"(Custom card)", "Custom": true}
     ],
-    "perks":[ 
+    "white":[ 
         {"text":"Fiercely loyal", "Custom": false}, 
         {"text":"Believes you are the most attractive person they've ever seen", "Custom": false}, 
         {"text":"Trusting", "Custom": false}, 
