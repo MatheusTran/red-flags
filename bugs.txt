@@ -1,0 +1,13 @@
+make cards transparent before presenting
+
+black list certain names, and also add character limit
+
+maybe let the people name the "fishes", then create tinder profiles with the name of the fishes
+
+somehow my turn was skipped, I did not play any cards
+possibly fixed?
+
+incrementing white cards is bugged?
+
+add emotes
+

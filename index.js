@@ -82,11 +82,17 @@ io.on("connection", socket =>{
         order_shuffle(roomcode)
         current["data"]["turn"] = 0
         current["data"]["state"] = "white"
+        if (current["waiting"]){
+            for (x in current["waiting"]){
+                current["players"].push(current["waiting"][x])
+                current["waiting"].splice(x,1)
+            }
+        }
         io.to(roomcode).emit("room_update", current)
         io.to(roomcode).emit("game", current)
-        io.to(roomcode).emit("new_card", cards["white"][randint(cards["white"].length)], "white")
-        io.to(roomcode).emit("new_card", cards["white"][randint(cards["white"].length)], "white")
-        io.to(roomcode).emit("new_card", cards["red"][randint(cards["red"].length)], "red")
+        socket.broadcast.to(roomcode).emit("new_card", cards["white"][randint(cards["white"].length)], "white")
+        socket.broadcast.to(roomcode).emit("new_card", cards["white"][randint(cards["white"].length)], "white")
+        socket.broadcast.to(roomcode).emit("new_card", cards["red"][randint(cards["red"].length)], "red")
     });
     socket.on("present", (roomcode, card, type) =>{
         io.to(roomcode).emit("show", card, type)

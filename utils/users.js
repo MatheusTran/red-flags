@@ -4,11 +4,16 @@ const rooms = {};
 function userJoin(id, username, roomcode){
     const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false, played:[]};
     if (!rooms[roomcode]){
-        rooms[roomcode] = {players:[],data:{state:"awaiting",turn:0}}
+        rooms[roomcode] = {players:[],data:{state:"awaiting",turn:0},waiting:[]}
         user.admin = true
     }
     users.push(user);
-    rooms[roomcode]["players"].push(user)
+    if(rooms[roomcode]["data"]["state"] === "white" || rooms[roomcode]["data"]["state"] === "awaiting"){
+        rooms[roomcode]["players"].push(user)
+    } else {
+        rooms[roomcode]["waiting"].push(user)
+    }
+    
     //user.order = rooms[roomcode]["players"].length -1
     //console.table(rooms[roomcode]["players"])
     return user;
@@ -33,12 +38,18 @@ function shuffle(array) {
 
 
 function order_shuffle(roomcode){
-    temp = [...Array(rooms[roomcode]["players"].length).keys()]//this creates a list of numbers up to n, sort of like [x for x in range(n)] in python
+    var temp = [...Array(rooms[roomcode]["players"].length).keys()]//this creates a list of numbers up to n, sort of like [x for x in range(n)] in python
+    var next = rooms[roomcode]["players"].indexOf(rooms[roomcode]["players"].find(user => user.swiper)) +1
+    if (next >= rooms[roomcode]["players"].length){
+        next = 0
+    }
     shuffle(temp)
+    temp[temp.indexOf(0)] = temp[next]
+    temp[next] = 0 //I tried doing [temp[next], temp[temp.indexOf(0)]] = [temp[temp.indexOf(0)],temp[next]] but that kept glitching for no reason
     for (x in rooms[roomcode]["players"]){//this does not do the same thing as python, keep that in mind
-        rooms[roomcode]["players"][x].swiper = temp[x]===0 //I just realized this is a typo, should be swipper not swiper. it's a bit too late to change it now
+        rooms[roomcode]["players"][x].swiper = temp[x]===0 
         rooms[roomcode]["players"][x].order = temp[x]
-        rooms[roomcode]["players"][x].played = []
+        rooms[roomcode]["players"][x].played = [] //might wanna check this out later
     }
 }
 

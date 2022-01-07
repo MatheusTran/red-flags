@@ -196,6 +196,10 @@ div.scrollmenu {
     border: solid black 1px;
 }
 
+.opacity{
+    opacity: 0.5;
+}
+
 .card:hover{
     cursor: pointer;
     /*transform: scale(1.25); /*might remove this later*/
