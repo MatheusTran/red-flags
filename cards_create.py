@@ -11,7 +11,9 @@ def jsonify(text):
 
 with open("cards.json", "w") as json:
     json.write('{ \n    "red": [ \n')
-    jsonify("flags.txt")
+    jsonify("flags.txt") 
     json.write('    ],\n    "white":[ \n')
     jsonify("perks.txt")
     json.write('    ]\n}')
+
+print("complete")

@@ -10,11 +10,10 @@ function userJoin(id, username, roomcode){
     users.push(user);
     if(rooms[roomcode]["data"]["state"] === "white" || rooms[roomcode]["data"]["state"] === "awaiting"){
         rooms[roomcode]["players"].push(user)
+        user.order = rooms[roomcode]["players"].length -1
     } else {
         rooms[roomcode]["waiting"].push(user)
     }
-    
-    //user.order = rooms[roomcode]["players"].length -1
     //console.table(rooms[roomcode]["players"])
     return user;
 };
@@ -59,6 +58,9 @@ function getARoom(room){
 
 function removeUser(id){
     quitter = getCurrentUser(id)
+    if (quitter.order && quitter.order < (rooms[quitter.roomcode]["players"].length)-1){
+        rooms[quitter.roomcode]["players"].find(user => user.order === (rooms[quitter.roomcode].length)-1).order = quitter.order
+    }
     users.splice(users.indexOf(quitter),1)
     rooms[quitter.roomcode]["players"].splice(rooms[quitter.roomcode]["players"].indexOf(quitter),1)
 }

@@ -103,6 +103,14 @@ select{
     border: none;
 }
 
+select:focus{
+    outline-width: 0;
+}
+
+::selection{
+    background-color: #FF655B;
+}
+
 select::-webkit-scrollbar {width: 0.5rem;}
 select::-webkit-scrollbar-track {background: red;}
 select::-webkit-scrollbar-thumb {
@@ -215,6 +223,7 @@ div.scrollmenu {
     color: red;
 }
 
+
 .swipe{
     height: 50%;
     width: 5%;
@@ -237,15 +246,30 @@ div.scrollmenu {
     left: 0;
 }
 
-i {
+div i {
     transform: scale(3);
     transition: all .2s ease-in-out;
 }
 
-i:hover{
+div i:hover{
     cursor: pointer;
     transform: scale(3.5);
 }
+
+#heart{
+    position: absolute;
+    top: 50%;
+    transform: scale(3);
+    left: 5%;
+    color: #FF655B;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+#heart:hover{
+    transform: scale(4);
+}
+
 
 #upper-half{
     width: 100%;

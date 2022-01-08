@@ -9,36 +9,40 @@ Left = document.querySelector(".left")
 Right = document.querySelector(".right")
 
 
-socket.on("joined", ()=>{ //change this in the future to change the message on the top
+socket.on("joined", ()=>{
     id = socket.id;
     socket.emit("new_player", {username, roomcode, id})
-    for(let x=0; x<10; x++){
+    for(let x=0; x<15; x++){
         socket.emit("pull", "white")
-    };
-    for(let x=0; x<5; x++){
+    }; //if every room has a seperate deck, then this has to emit the room code as well
+    for(let x=0; x<10; x++){
         socket.emit("pull", "red")
     };
 });
 
 socket.on("new_card", (card, type) =>{
-    hand = document.querySelector("#hand")
-    cards.push(card)
-    thing = document.createElement("div")
-    thing.setAttribute("class", type + " card") 
-    thing.textContent = card["text"];
-    if (card["Custom"]){
-        thing.appendChild(document.createElement("br"))
-        custom = document.createElement("input")
-        custom.classList.add("custom")
-        custom.setAttribute("placeholder", "custom text")
-        thing.appendChild(custom)
-    }; //make this a function 
-    thing.setAttribute("id", cards.length)
-    thing.setAttribute("ondblclick", `select(${cards.length})`)
-    if (type==="red"){
-        hand.appendChild(thing)
+    if (!cards.find(check => check === card)){
+        hand = document.querySelector("#hand")
+        cards.push(card)
+        thing = document.createElement("div")
+        thing.setAttribute("class", type + " card") 
+        thing.textContent = card["text"];
+        if (card["Custom"]){
+            thing.appendChild(document.createElement("br"))
+            custom = document.createElement("input")
+            custom.classList.add("custom")
+            custom.setAttribute("placeholder", "custom text")
+            thing.appendChild(custom)
+        }; //make this a function 
+        thing.setAttribute("id", cards.length)
+        thing.setAttribute("ondblclick", `select(${cards.length})`)
+        if (type==="red"){
+            hand.appendChild(thing)
+        } else {
+            hand.insertBefore(thing, hand.firstChild)
+        }
     } else {
-        hand.insertBefore(thing, hand.firstChild)
+        socket.emit("pull", type) //this redraws a new card in the event of the same card
     }
 });
 
@@ -64,21 +68,22 @@ socket.on("game", (upRoom)=>{
     switch(room["data"]["state"]){
         case "awaiting"://this is kind of pointless
             message.innerText = "waiting for host to start the game"
+            button.innerText = "start"
+            button.style.display = room["players"].find(user => user.username === username)["admin"]? "inline-block" : "none" 
+            played.innerHTML =""
             break;
         case "white":
             played.innerHTML=""
             Left.style.display = "none"
             Right.style.display = "none"
             if (room["players"].find(user => user.username === username)["swiper"]){
-                message.innerText = "You are lonely and looking for someone to fill the empty void that is your heart. Don't worry, you'll find someone eventually"
-                socket.emit("increment", roomcode)
+                message.innerText = "You are lonely and looking for a fish to fill the empty void that is your heart. Don't worry, you'll find someone eventually"
+                socket.emit("increment", roomcode)//I might have to remove this later in the future
+                button.style.display = "none"
                 break;
             }
             message.innerText = `${room["players"].find(user => user.swiper)["username"]} is looking for love, play two white cards`
             button.innerText = "confirm"
-            break;
-        case "waiting":
-            message.innerText = "waiting for others"
             break;
         case "presenting":
             you = room["players"].find(user => user.order === room["data"]["turn"]) //wait a second this is basically the same as var "you", I can change this later
@@ -95,7 +100,7 @@ socket.on("game", (upRoom)=>{
         case "red":
             flagger = room["players"].find(user => user.order ===room["data"]["turn"])
             //might change this to an if else statement 
-            flagged = flagger["order"] === 1 ? room["players"].find(user => user.order === room["players"].length-1) : room["players"].find(user => user.order === flagger["order"]-1)
+            flagged = flagger["order"] === 1 ? room["players"].find(user => user.order === room["players"].length-1) : room["players"].find(user => user.order === room["data"]["turn"]-1)
             played.innerHTML = ""
             if (flagger["username"] === username){
                 you = room["players"].find(user => user.username === username)
@@ -149,7 +154,6 @@ function select(id){//this is to select the cards
                     selected.parentElement.removeChild(selected)
                     played.appendChild(selected)
                 }
-                
                 button.style.display = played.children.length === 2 ? "inline-block" : "none"
                 break;
 
@@ -194,9 +198,11 @@ function action(){
                 if(cards[parseInt(played.children[x].id)-1]["Custom"]){
                     create_custom(played.children[x].id)
                 }
+                cards[parseInt(played.children[x].id)-1] = "bleh"//this means nothing, it is basically just to remove the card
                 socket.emit("submitCards",roomcode, username, played.children[x].innerText)
             }
             socket.emit("increment", roomcode)
+            message.innerText = "Waiting for others"
             button.style.display = "none"
             break;
         case "presenting":
@@ -237,4 +243,9 @@ function opacity(plays){
     played.appendChild(thing.cloneNode(true))
     thing.textContent = plays[1];
     played.appendChild(thing.cloneNode(true))
+}
+
+function bubbles(){
+    heart = document.createElement("i")
+    heart.setAttribute("class", "fas fa-heart bubble")
 }

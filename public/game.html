@@ -9,12 +9,13 @@
 </head>
 <body>
 <div id="upper-half"> 
-    <h2 id="msg-box">waiting for host to start the game</h2>
+    <h2 id="msg-box"></h2><!--player messages go here-->
     <div id="played-cards" class="scrollmenu"> <!--this no longer needs to be a scroll menu, but I will keep it-->
         <!--cards that are played go here-->
     </div>
     <button id="player-button" class="btn" onclick="action()">start</button> <!--this is the button that the players use for everything-->
 </div>
+<i class="fas fa-heart" id="heart" onclick="bubbles()"></i>
 <div class="left swipe" onclick="socket.emit('increment', roomcode)"><i class="fas fa-angle-left"></i></div>
 <div class="right swipe" onclick="socket.emit('winner',roomcode)"><i class="fas fa-angle-right"></i></div>
 <div id="lower-half">
