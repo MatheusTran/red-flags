@@ -99,8 +99,21 @@ socket.on("game", (upRoom)=>{
             break;
         case "red":
             flagger = room["players"].find(user => user.order ===room["data"]["turn"])
-            //might change this to an if else statement 
-            flagged = flagger["order"] === 1 ? room["players"].find(user => user.order === room["players"].length-1) : room["players"].find(user => user.order === room["data"]["turn"]-1)
+            if (!flagger){
+                message.innerText = "this player has quit"
+                button.innerText = "skip"
+                button.style.display = "inline-block"
+                break;
+            }
+            if (flagger["order"] === 1){
+                flagged = room["players"].find(user => user.order === room["players"].length-1)
+            } else {
+                flagged = room["players"].find(user => 0 < user.order < room["data"]["turn"] && user.played.length === 2)
+                if (!flagged){
+                    socket.emit("increment", roomcode)
+                    break;
+                }
+            }
             played.innerHTML = ""
             if (flagger["username"] === username){
                 you = room["players"].find(user => user.username === username)
@@ -114,6 +127,7 @@ socket.on("game", (upRoom)=>{
             break;
         case "pick":
             played.innerHTML = ""
+            button.style.display = "none"
             candidate = room["players"].find(user => user.order ===room["data"]["turn"])
             swiper = room["players"].find(user => user.swiper)
             if (swiper["username"] === username){

@@ -77,11 +77,35 @@ body {
     font-family: Roboto Slab, sans-serif;
     text-align: center;
     font-weight: bold;
+    overflow-x: none;
+    text-rendering: geometricPrecision;
+}
+
+span {
+    border: none;
+    color: red;
+    width: 50%;
+    height: 1em;
+    display: block;
+    font-size: 1rem;
+    opacity: 1;
+}
+span[contenteditable]:empty:focus::before,
+span[contenteditable]:empty::before{
+    content: 'custom text';
+    opacity: 0.5;
+}
+span:focus{
+    outline-width: 0;
 }
 
 .input::placeholder{
     color: antiquewhite;
     opacity: 0.5;
+}
+
+input:focus{
+    outline-width: 0;
 }
 
 .box{
