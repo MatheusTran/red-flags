@@ -125,7 +125,7 @@ socket.on("game", (upRoom)=>{
                 socket.emit("present", roomcode, candidate["played"][2], "red")
                 break;
             }
-            message.innerText = `${swiper["username"]} is searching for they're one true lover` //grammar wrong on purpoise
+            message.innerText = `${swiper["username"]} is searching for their one true lover`
             break;
         }
 })
