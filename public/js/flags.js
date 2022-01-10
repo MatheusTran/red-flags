@@ -108,7 +108,7 @@ socket.on("game", (upRoom)=>{
             if (flagger["order"] === 1){
                 flagged = room["players"].find(user => user.order === room["players"].length-1)
             } else {
-                flagged = room["players"].find(user => 0 < user.order < room["data"]["turn"] && user.played.length === 2)
+                flagged = room["players"].find(user => 0 < user.order < room["data"]["turn"] && user.played.length === 2)//fix this
                 if (!flagged){
                     socket.emit("increment", roomcode)
                     break;

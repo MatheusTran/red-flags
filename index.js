@@ -131,7 +131,6 @@ io.on("connection", socket =>{
         io.to(quitter.roomcode).emit("room_update", current)
     });
 }); 
-//order_shuffle(roomcode)
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`\n\x1b[32m[server]\x1b[0m running on port: \x1b[33m${PORT}\x1b[0m \n`)); //

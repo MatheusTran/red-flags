@@ -2,7 +2,7 @@ const users = [];
 const rooms = {};
 //join user to chat
 function userJoin(id, username, roomcode){
-    const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false, played:[]};
+    const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false, played:[]};//if I use index method then swiper is also obsolete
     if (!rooms[roomcode]){
         rooms[roomcode] = {players:[],data:{state:"awaiting",turn:0},waiting:[]}
         user.admin = true
