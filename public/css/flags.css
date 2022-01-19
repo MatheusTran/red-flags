@@ -11,7 +11,6 @@ h1{
     font-size: 40px;
 }
 
-
 #red{
     text-align: right;
     font-size:70px;
@@ -119,6 +118,8 @@ input:focus{
     margin-bottom: 0px;
     color: white;
 }
+
+
 
 select{
     width: 100%;

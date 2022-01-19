@@ -1,25 +1,20 @@
-const users = [];
+const { compute_rest_props } = require("svelte/internal"); //I do not remember adding this? no clue what this does
 const rooms = {};
 //join user to chat
 function userJoin(id, username, roomcode){
-    const user = {id, username, roomcode, score:0, admin:false, order:0, swiper:false, played:[]};//if I use index method then swiper is also obsolete
+    const user = {id, username, roomcode, score:0, admin:false, played:[]};//if I use index method then swiper is also obsolete
     if (!rooms[roomcode]){
-        rooms[roomcode] = {players:[],data:{state:"awaiting",turn:0},waiting:[]}
+        rooms[roomcode] = {players:[],data:{state:"awaiting",turn:1},waiting:[]}
         user.admin = true
     }
-    users.push(user);
     if(rooms[roomcode]["data"]["state"] === "white" || rooms[roomcode]["data"]["state"] === "awaiting"){
         rooms[roomcode]["players"].push(user)
-        user.order = rooms[roomcode]["players"].length -1
+        rooms[roomcode]["data"]["turn"]++
     } else {
         rooms[roomcode]["waiting"].push(user)
     }
     //console.table(rooms[roomcode]["players"])
     return user;
-};
-
-function getCurrentUser(id){
-    return users.find(user => user.id === id);
 };
 
 function shuffle(array) {
@@ -35,20 +30,14 @@ function shuffle(array) {
     return array;
 }
 
-
 function order_shuffle(roomcode){
-    var temp = [...Array(rooms[roomcode]["players"].length).keys()]//this creates a list of numbers up to n, sort of like [x for x in range(n)] in python
-    var next = rooms[roomcode]["players"].indexOf(rooms[roomcode]["players"].find(user => user.swiper)) +1
-    if (next >= rooms[roomcode]["players"].length){
-        next = 0
-    }
-    shuffle(temp)
-    temp[temp.indexOf(0)] = temp[next]
-    temp[next] = 0 //I tried doing [temp[next], temp[temp.indexOf(0)]] = [temp[temp.indexOf(0)],temp[next]] but that kept glitching for no reason
+    //var temp = [...Array(rooms[roomcode]["players"].length).keys()]
+    var next = rooms[roomcode]["players"][1]//I just realized this doesn't actually work... will have to find a new method later
+    rooms[roomcode]["players"].splice(1,1) //however it at least prevents the same person being the swiper twice
+    shuffle(rooms[roomcode]["players"])
+    rooms[roomcode]["players"].splice(0,0,next)
     for (x in rooms[roomcode]["players"]){//this does not do the same thing as python, keep that in mind
-        rooms[roomcode]["players"][x].swiper = temp[x]===0 
-        rooms[roomcode]["players"][x].order = temp[x]
-        rooms[roomcode]["players"][x].played = [] //might wanna check this out later
+        rooms[roomcode]["players"][x].played = [] 
     }
 }
 
@@ -56,29 +45,18 @@ function getARoom(room){
     return rooms[room]
 };
 
-function removeUser(id){
-    quitter = getCurrentUser(id)
-    users.splice(users.indexOf(quitter),1)
-    rooms[quitter.roomcode]["players"].splice(rooms[quitter.roomcode]["players"].indexOf(quitter),1)
-}
-
 function newAdmin(room){
     if (!rooms[room]["players"][0]){
         delete rooms[room]
     } else {
-        newAd = rooms[room]["players"][0]
-        newAd.admin = true
-        users[users.indexOf(newAd)].admin = true
-        //console.table(rooms[room])
+        rooms[room]["players"][0]["admin"] = true
     }
 
 }
 
 module.exports = {
     userJoin,
-    getCurrentUser,
     getARoom,
-    removeUser,
     newAdmin,
     order_shuffle
 };

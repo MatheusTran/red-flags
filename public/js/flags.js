@@ -11,6 +11,7 @@ Right = document.querySelector(".right")
 
 socket.on("joined", ()=>{
     id = socket.id;
+    //socket["roomcode"] = roomcode//pretty sure this is useless now
     socket.emit("new_player", {username, roomcode, id})
     for(let x=0; x<15; x++){
         socket.emit("pull", "white")
@@ -21,7 +22,7 @@ socket.on("joined", ()=>{
 });
 
 socket.on("new_card", (card, type) =>{
-    if (!cards.find(check => check === card)){
+    if (!cards.find(search=> search.text === card.text)){ //seems to work, but not 100% sure
         hand = document.querySelector("#hand")
         cards.push(card)
         thing = document.createElement("div")
@@ -35,7 +36,7 @@ socket.on("new_card", (card, type) =>{
             thing.appendChild(custom)
         }; //make this a function 
         thing.setAttribute("id", cards.length)
-        thing.setAttribute("ondblclick", `select(${cards.length})`)
+        thing.setAttribute("ondblclick", `select(${cards.length})`)// on double click
         if (type==="red"){
             hand.appendChild(thing)
         } else {
@@ -73,20 +74,26 @@ socket.on("game", (upRoom)=>{
             played.innerHTML =""
             break;
         case "white":
-            played.innerHTML=""
+            if (played.children.length ===3){
+                played.innerHTML = ""
+            }
             Left.style.display = "none"
             Right.style.display = "none"
-            if (room["players"].find(user => user.username === username)["swiper"]){
+            if (room["players"][0]["username"] === username){
                 message.innerText = "You are lonely and looking for a fish to fill the empty void that is your heart. Don't worry, you'll find someone eventually"
-                socket.emit("increment", roomcode)//I might have to remove this later in the future
                 button.style.display = "none"
                 break;
             }
-            message.innerText = `${room["players"].find(user => user.swiper)["username"]} is looking for love, play two white cards`
+            if (room["players"].find(user => user.id === id)["played"].length){
+                message.innerText = "Waiting for others"
+                room["data"]["state"] = "" //this is just so that they can't mess things up
+            } else {
+                message.innerText = `${room["players"][0]["username"]} is looking for love, play two white cards`
+            }
             button.innerText = "confirm"
             break;
         case "presenting":
-            you = room["players"].find(user => user.order === room["data"]["turn"]) //wait a second this is basically the same as var "you", I can change this later
+            you = room["players"][room["data"]["turn"]] //wait a second this is basically the same as var "you", I can change this later
             played.innerHTML = ""
             if (you["username"] === username){
                 message.innerText = "you are presenting your fish, press next to reveal your cards"
@@ -98,21 +105,11 @@ socket.on("game", (upRoom)=>{
             message.innerText = `${you["username"]} is presenting their fish`
             break;
         case "red":
-            flagger = room["players"].find(user => user.order ===room["data"]["turn"])
-            if (!flagger){
-                message.innerText = "this player has quit"
-                button.innerText = "skip"
-                button.style.display = "inline-block"
-                break;
-            }
-            if (flagger["order"] === 1){
-                flagged = room["players"].find(user => user.order === room["players"].length-1)
+            flagger = room["players"][room["data"]["turn"]]
+            if (room["data"]["turn"] === 1){
+                flagged = room["players"][room["players"].length-1]
             } else {
-                flagged = room["players"].find(user => 0 < user.order < room["data"]["turn"] && user.played.length === 2)//fix this
-                if (!flagged){
-                    socket.emit("increment", roomcode)
-                    break;
-                }
+                flagged = room["players"][room["data"]["turn"]-1]
             }
             played.innerHTML = ""
             if (flagger["username"] === username){
@@ -128,8 +125,8 @@ socket.on("game", (upRoom)=>{
         case "pick":
             played.innerHTML = ""
             button.style.display = "none"
-            candidate = room["players"].find(user => user.order ===room["data"]["turn"])
-            swiper = room["players"].find(user => user.swiper)
+            candidate = room["players"][room["data"]["turn"]]
+            swiper = room["players"][0]
             if (swiper["username"] === username){
                 message.innerText = "swipe left to see the next fish, swipe right to choose your lover"
                 Left.style.display = "flex"
@@ -155,9 +152,9 @@ socket.on("show", (card, type)=>{
     }
 })
 
-function select(id){//this is to select the cards
-    if (!room["players"].find(user => user.username === username)["swiper"]){
-        var selected = document.getElementById(id)
+function select(card){//this is to select the cards
+    if (!(room["players"][0]["id"] === id)){
+        var selected = document.getElementById(card)
         switch (room["data"]["state"]){
             case "white": 
                 if (selected.parentElement.id === "played-cards"){ //switch this around later, add an elif
@@ -216,8 +213,9 @@ function action(){
                 socket.emit("submitCards",roomcode, username, played.children[x].innerText)
             }
             socket.emit("increment", roomcode)
-            message.innerText = "Waiting for others"
             button.style.display = "none"
+            socket.emit("pull", "white")
+            socket.emit("pull", "white")
             break;
         case "presenting":
             if (you["played"].length > 0){
@@ -242,6 +240,7 @@ function action(){
                 socket.emit("present", roomcode, played.children[2].innerText, "red")
                 played.removeChild(played.children[2])
                 button.innerText = "next"
+                socket.emit("pull", "red")
                 break;
             }
             socket.emit("increment", roomcode)

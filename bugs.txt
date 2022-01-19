@@ -15,8 +15,12 @@ maybe change it to "blank is checking out blank's fish"
 
 add removing ability
 
-swiper boolean is now obsolete
-
 use character index instead of order attribute, this could make things simpler, however the scoreboard will now shuffle every time
+swiper boolean is now obsolete
+these two are now complete?
 
 and simplify socket.on(increment)
+
+also change the username checker to id, to avoid problems with the same username
+
+create tabs for cards
