@@ -92,7 +92,7 @@ io.on("connection", socket =>{
             current["data"]["turn"]--//I have to change this later, in case they are in the waiting room instead of the actual room
         }
         if (quitter.admin){
-            newAdmin(socket["room"])
+            newAdmin(socket["room"]) 
         }
         if (current["players"].length <3){
             current["data"]["turn"] = 0
@@ -105,7 +105,6 @@ io.on("connection", socket =>{
             current["data"]["state"] = "white"
             io.to(socket["room"]).emit("game", current)
         } //maybe I could move this above the previous if statement, or change it to an if else statement
-
         io.to(socket["room"]).emit("room_update", current)
     });
 }); 
