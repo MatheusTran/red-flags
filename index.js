@@ -107,6 +107,7 @@ io.on("connection", socket =>{
         } //maybe I could move this above the previous if statement, or change it to an if else statement
         io.to(socket["room"]).emit("room_update", current)
     });
+    
 }); 
 
 const PORT = process.env.PORT || 3000;
