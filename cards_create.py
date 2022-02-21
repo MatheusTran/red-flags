@@ -9,11 +9,12 @@ def jsonify(text):
             else:
                 json.write('        {'+f'"text":"{card}", ' + '"Custom": false}' + (", \n" if i != last else "\n"))
 
-with open("cards.json", "w") as json:
-    json.write('{ \n    "red": [ \n')
-    jsonify("flags.txt") 
-    json.write('    ],\n    "white":[ \n')
-    jsonify("perks.txt")
-    json.write('    ]\n}')
+if __name__ == "__main__":
+    with open("cards.json", "w") as json:
+        json.write('{ \n    "red": [ \n')
+        jsonify("flags.txt") 
+        json.write('    ],\n    "white":[ \n')
+        jsonify("perks.txt")
+        json.write('    ]\n}')
 
-print("complete")
+    print("complete")

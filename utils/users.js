@@ -1,4 +1,3 @@
-//I do not remember adding this? no clue what this does
 const rooms = {};
 //join user to chat
 function userJoin(id, username, roomcode){

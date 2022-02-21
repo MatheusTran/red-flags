@@ -24,3 +24,13 @@ and simplify socket.on(increment)
 also change the username checker to id, to avoid problems with the same username
 
 create tabs for cards
+
+implement room search, and browse lobbies, implement a binary search algorithm 
+
+add react
+
+Redis database
+
+Add APIs like dice bear
+
+doubly linked lists for the order of each player
